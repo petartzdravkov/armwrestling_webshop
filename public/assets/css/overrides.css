@@ -1,0 +1,63 @@
+/* dark theme */
+
+[data-bs-theme="dark"]{
+    /* background */
+    --bs-body-bg: #000000;
+}
+
+[data-bs-theme="dark"] .btn-primary{
+    /* btn primary */
+    --bs-btn-bg: #6a0a0a;
+    --bs-btn-border-color: #410000;
+    --bs-btn-hover-bg: #410000;
+    --bs-btn-hover-border-color: #410000;
+}
+
+
+/* global */
+:root{
+    --bs-border-radius: 0;
+}
+
+
+
+
+
+/* fonts */
+:root {
+    --font-body: 'Inter', sans-serif;
+    --font-heading: 'Bebas Neue', sans-serif;
+    /* --font-accent: 'Courier New', monospace; */
+}
+
+h1, h2, h3, h4, h5, h6{
+    font-family: var(--font-heading);
+    letter-spacing: 0.1em;
+}
+
+.navbar{
+    font-family: var(--font-heading);
+    letter-spacing: 0.15em;
+    font-size: 0.7em;
+}
+
+p{
+    font-family: var(--font-body);
+    font-size: 0.6em;
+}
+
+.btn{
+    font-family: var(--font-heading);
+    font-size: 0.6em;
+    letter-spacing: 0.3em;
+}
+
+.dropdown-item{
+    font-family: var(--font-body);
+    font-size: 0.7rem;
+}
+
+.dropdown span{
+    font-family: var(--font-body);
+    font-size: 0.6rem;    
+}
