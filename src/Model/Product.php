@@ -4,6 +4,7 @@ namespace Model;
 
 class Product{
 
+    private $id;
     private $name;
     private $price;
     private $description;
@@ -11,6 +12,18 @@ class Product{
     private $date_added;
     private $status;
     private $category_id;
+
+    // Id
+    public function getId() {
+        return $this->id;
+    }
+
+    public function setId($id) {
+        if (!is_numeric($id) || $id <= 0) {
+            throw new \InvalidArgumentException("Invalid product ID.");
+        }
+        $this->id = $id;
+    }
 
     // Name
     public function getName() {

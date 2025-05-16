@@ -1,1 +1,0 @@
-petarzdravkov@petars-pop-os.463129:1746866095

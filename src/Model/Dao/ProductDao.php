@@ -52,6 +52,7 @@ class ProductDao extends AbstractDao{
 	$product = null;
 	if($row){
 	    $product = new Product();
+	    $product->setId($row['id']);
 	    $product->setName($row['name']);
 	    $product->setPrice($row['price']);
 	    $product->setDescription($row['description']);
@@ -62,5 +63,26 @@ class ProductDao extends AbstractDao{
 	}
 	return $product;
 
+    }
+
+    public function getAllSizesByProductId($product_id){
+	$pdo = self::getPdoConnection();
+
+	$sql = "
+SELECT s.name, ps.amount
+FROM dd_products as p
+JOIN sd_category_sizes as cs
+ON p.category_id = cs.category_id
+RIGHT JOIN dd_product_sizes as ps
+ON cs.size_id = ps.size_id
+JOIN sd_sizes as s
+ON cs.size_id = s.id
+WHERE p.id = ? AND ps.product_id = ?;
+";
+	$stmt = $pdo->prepare($sql);
+	$stmt->execute([$product_id, $product_id]);
+	$rows = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+
+	return $rows;
     }
 }

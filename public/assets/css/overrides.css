@@ -61,3 +61,17 @@ p{
     font-family: var(--font-body);
     font-size: 0.6rem;    
 }
+
+.product-features span{
+    font-family: var(--font-body);
+    font-size: 0.6rem;    
+}
+
+.small{
+    font-family: var(--font-body);
+    font-size: 0.55rem;        
+}
+
+.description{
+    font-size: 0.8rem;    
+}

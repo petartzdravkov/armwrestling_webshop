@@ -31,10 +31,13 @@ class ProductController{
 
     // view individual product
     public function view(){
-	$pname = str_replace("-", " ", htmlentities(trim($_GET['pname'])));
+	$og_pname = htmlentities(trim($_GET['pname']));
+	$pname = str_replace("-", " ", $og_pname);
 
 	$productDao = new ProductDao();
 	$product = $productDao->getProductByName($pname);
+	$available_sizes = $productDao->getAllSizesByProductId($product->getId());
+	
 	
 	require_once "../src/View/products/view.php";	
     }
