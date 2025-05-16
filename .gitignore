@@ -1,0 +1,10 @@
+# Ignore sensitive config file
+src/Config/config.php
+
+# Ignore Emacs temporary and backup files
+*~
+\#*\#
+.\#*
+
+# Ignore Images
+# public/assets/images/products
