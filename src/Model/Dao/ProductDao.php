@@ -109,4 +109,56 @@ WHERE p.id = ? AND ps.product_id = ? AND ps.amount > 0;
 
 	return $rows;
     }
+
+    public function getSizeId($size){
+	$pdo = self::getPdoConnection();
+
+	$sql = "SELECT id FROM sd_sizes WHERE name = ?";
+	$stmt = $pdo->prepare($sql);
+	$stmt->execute([$size]);
+	$size_id = $stmt->fetchColumn();
+
+	return $size_id;	
+    }
+
+    public function getAmountByIdAndSize($prod_id, $size){
+	$pdo = self::getPdoConnection();
+
+	$size_id = $this->getSizeId($size);
+	$sql = "SELECT amount FROM dd_product_sizes WHERE product_id = ? AND size_id = ?";
+	$stmt = $pdo->prepare($sql);
+	$stmt->execute([$prod_id, $size_id]);
+	$amount = $stmt->fetchColumn();
+	
+	return $amount;
+    }
+
+    public function decreaseStock($id, $size, $bought_amount){
+	$pdo = self::getPdoConnection();
+
+	$size_id = $this->getSizeId($size);
+	$name = $this->getProdNameById($id);
+	$sql = "
+UPDATE dd_product_sizes
+SET amount = amount - ?
+WHERE product_id = ? AND size_id = ?
+";
+	$stmt = $pdo->prepare($sql);
+	$stmt->execute([$bought_amount, $id, $size_id]);
+
+	if ($stmt->rowCount() === 0) {
+	    throw new \Exception("Not enough stock or item not found. Item: $name, size: $size.");
+	}
+    }
+
+    public function getProdNameById($prod_id){
+	$pdo = self::getPdoConnection();
+
+	$sql = "SELECT name FROM dd_products WHERE id = ?";
+	$stmt = $pdo->prepare($sql);
+	$stmt->execute([$prod_id]);
+	$name = $stmt->fetchColumn();
+	
+	return $name;
+    }
 }

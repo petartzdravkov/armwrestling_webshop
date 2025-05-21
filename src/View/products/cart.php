@@ -7,19 +7,6 @@
 <main>
     <div class="container">
 
-	<?php
-	/* foreach($_SESSION['cart'] as $id => $amount){
-	   $product_in_cart = $productDao->getProductById($id);
-	   echo "Name: " . $product_in_cart->getName() . "<br>";
-	   echo "Description: " . $product_in_cart->getDescription() . "<br>";
-	   echo "Price: " . $product_in_cart->getPrice() . "<br>";
-	   echo "Amount: " . $amount . "<br>";
-	   echo "<br>";
-	   } */
-	/* var_dump($_SESSION);
-	   var_dump($_POST); */
-	?>
-
 	<?php if(count($_SESSION['cart']) == 0){ ?>
 	    <div class="wrapper min-vh-100 d-flex justify-content-center align-items-center">
 		<div class="text-center">
@@ -42,9 +29,10 @@
 		    </thead>
 		    <tbody>
 			<?php
-			foreach($cart_items as $id => $amount){
+			foreach($cart_items as $key => $amount){
+			    [$id, $size] = explode("|", $key);
 			    $cart_item = $productDao->getProductById($id);
-//			    $stockBySize;
+			    $sizes_in_stock = $productDao->getAmountByIdAndSize($id, $size);
 			?>
 			    <tr>
 				<td>
@@ -54,8 +42,7 @@
 					</div>
 					<div>
 					    <h5 class="fw-bold mb-1"><?=$cart_item->getName()?></h5>
-					    <!-- TODO add sizes -->
-					    <!-- <p class="text-muted mb-0">Size: XS</p> -->
+					    <p class="text-muted mb-0">Size: <?=strtoupper($size);?></p>
 					</div>
 				    </div>
 				</td>
@@ -65,7 +52,7 @@
 				<td class="text-center">
 				    <div class="d-flex flex-column flex-md-row justify-content-md-center">
 					<button class="btn btn-outline-secondary" onclick="decrementQuantity(this)">−</button>
-					<input type="number" class="btn btn-secondary" value="<?=$amount;?>" min="1" max="99">
+					<input type="number" class="btn btn-secondary" value="<?=$amount;?>" min="1" max="<?=$sizes_in_stock;?>">
 					<button class="btn btn-outline-secondary" onclick="incrementQuantity(this)">+</button>
 				    </div>
 				</td>
@@ -73,7 +60,7 @@
 				    <div class="d-flex flex-column ">
 					<span class="fw-medium"><?=$cart_item->getPrice() * $amount?>&euro;</span>
 					<form method="POST">
-					    <input type="hidden" name="prodId" value="<?=$id;?>">
+					    <input type="hidden" name="key" value="<?=$key;?>">
 					    <button type="submit" class="btn btn-sm btn-light">
 						<i class="bi bi-trash"></i>
 					    </button>

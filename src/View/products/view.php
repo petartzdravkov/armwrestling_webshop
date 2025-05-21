@@ -60,6 +60,7 @@
 		<!-- Size Selection -->
 		<div class="mb-4">
 		    <p class="mb-2 fw-medium">SIZE</p>
+		    <h6 class="text-danger"> <?=$error_msg;?></h6>
 		    <div class="d-flex flex-wrap gap-2">
 			<?php
 			if(!$available_sizes){
@@ -71,7 +72,10 @@
 				$selected_size = isset($_GET['size']) ? htmlentities(trim($_GET['size'])) : false;
 			?>
 			    <a href="<?= "index.php?target=product&action=view&pname=$og_pname" . "&size=" . $size['name'];?>" class="btn size-option <?=($selected_size === $size['name']) ? 'active' : '';?>"><?=strtoupper($size['name']);?></a>
-			<?php }} ?>
+			<?php
+			}
+			}
+			?>
 		    </div>
 		</div>
 		

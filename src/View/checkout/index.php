@@ -117,7 +117,10 @@
               </div>
             </div>
 	    <!-- TODO integrate stripe -->
-	    <a href="index.php?target=checkout&action=success" class="btn btn-primary w-100 p-4">Pay Now</a>
+	    <form method="POST">
+		<!-- <a href="index.php?target=checkout&action=success" class="btn btn-primary w-100 p-4">Pay Now</a> -->
+		<input type="submit" class="btn btn-primary w-100 p-4" name="pay_btn" value="Pay Now"/>
+	    </form>
             
           </div>
         </div>
@@ -130,7 +133,8 @@
               <!-- Cart Items -->
               <div class="mb-4">
 		  <?php
-		  foreach($cart_items as $id => $amount){
+		  foreach($cart_items as $key => $amount){
+		      [$id, $size] = explode("|", $key);
 		      $cart_item = $productDao->getProductById($id);
 		  ?>
 		      <div class="d-flex mb-3">
@@ -142,8 +146,7 @@
 			  </div>
 			  <div class="flex-grow-1">
 			      <h3 class="h6 mb-1"><?=$cart_item->getName();?></h3>
-			      <!-- TODO sizes -->
-			      <!-- <p class="small text-muted mb-0">XS</p> -->
+			      <p class="text-muted mb-0">Size: <?=strtoupper($size);?></p>
 			  </div>
 			  <div class="ms-3 text-end">
 			      <p class="mb-0"><?=$cart_item->getPrice();?>&euro;</p>
@@ -171,6 +174,7 @@
             </div>
             
             <p class="small text-muted mb-1">Including <?=($total + 12)*0.21?>&euro; in taxes</p>
+	    <p class="text-danger"><?=$payment_error;?></p>
           </div>
         </div>
       </div>
