@@ -4,6 +4,9 @@
 if(isset($_SESSION['email'])){
     header("Location: index.php");
     die();
+}else{
+    header("Location: index.php?target=user&action=login");
+    die();
 }
 
 ?>

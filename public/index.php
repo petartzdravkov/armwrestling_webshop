@@ -1,6 +1,5 @@
 <?php
 
-
 // define the application root path (/var/www/phpstudy/GIT/armwrestling_webshop)
 define('ROOT_PATH', dirname(__DIR__));
 
@@ -19,8 +18,10 @@ header('Content-Type: text/html; charset=UTF-8');
 // start session
 session_start();
 
-// make pdo connection
-//\Model\Dao\AbstractDao::init();
+// Initialize cart if it doesn't exist
+if (!isset($_SESSION['cart'])) {
+    $_SESSION['cart'] = [];
+}
 
 $fileNotFound = false;
 //request?target=user&action=register

@@ -22,13 +22,13 @@
     </head>
     <body class="d-flex flex-column min-vh-100">
 	<nav class="navbar navbar-expand-md py-0">
-	    <div class="container justify-content-between">
+	    <div class="container justify-content-between position-relative">
 		
 		<button class="navbar-toggler border border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar">
 		    <i class="bi bi-list"></i>
 		</button>
 
-		<a href="index.php" class="navbar-brand"> IP </a>
+		<a href="index.php" class="navbar-brand position-absolute start-50 translate-middle-x"> IP </a>
 
 		<div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasNavbar">
 		    <div class="offcanvas-header">
@@ -59,8 +59,14 @@
 			</a>
 		    </div>
 		    <div class="cart-icon p-2">
-			<a href="#" class="nav-link">			
-			    <i class="bi bi-bag"></i>
+			<a href="index.php?target=product&action=cart" class="nav-link">			
+			    <i class="bi bi-bag position-relative">
+				<?php if(count($_SESSION['cart'])){ ?>
+				<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger px-1">
+				    <?=count($_SESSION['cart'])?>
+				</span>
+				<?php } ?>
+			    </i>
 			</a>
 		    </div>
 		</div>

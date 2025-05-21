@@ -27,11 +27,14 @@
     <!-- Products Grid -->
     <div class="row g-4">
 	<?php if($products){
-	    foreach($products as $product){ ?>
+	    foreach($products as $product){
+		$available_sizes = $productDao->getAllSizesByProductId($product->getId());
+	?>
 	<div class="col-12 col-sm-6 col-md-4 col-lg-3">
 	    <div class="card border-0 h-100">
-		<div class="product-img-contatiner w-100 overflow-hidden" style="height: 285px">
+		<div class="product-img-contatiner w-100 overflow-hidden position-relative" style="height: 285px">
 		    <a href="index.php?target=product&action=view&pname=<?=str_replace(" ", "-", strtolower($product->getName()));?>"> <img src="<?=$product->getImgPath();?>" class="card-img-top p-2 bg-secondary-subtle object-fit-cover w-100 h-100" alt="clothing_image"> </a>
+		    <h6 class="text-muted position-absolute bottom-0 start-50 translate-middle-x"><?=!$available_sizes ? 'OUT OF STOCK' : '';?></h6>
 		</div>
 		<div class="card-body px-0 pt-3 pb-0">
 		    <h5 class="card-title"><?=$product->getName();?></h5>

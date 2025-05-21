@@ -34,8 +34,14 @@ if(isset($_GET['regsuccess'])){
       <input type="email" name="email" placeholder="Email" class="m-2" value="<?=$email;?>" autofocus><br>
       <input type="password" name="pass" placeholder="Password" class="m-2" value="<?=$pass;?>"><br>
 
-      <div class="text-center">
-	<input type="submit" name="login_btn" value="Login" class="m-2">
+      <div class="text-center px-2 my-1">
+	<input type="submit" name="login_btn" value="Login" class="w-100">
+      </div>
+    
+    <h6 class="text-center py-1 m-0"> or </h6>
+
+      <div class="text-center px-2 my-0">
+	<input type="submit" name="register_btn" value="Register" class="w-100">
       </div>
     </form>
   </div>

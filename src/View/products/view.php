@@ -1,7 +1,3 @@
-<?php
-
-?>
-
 <?php include_once '../src/View/layouts/header.php';?>
 
 <main>
@@ -11,7 +7,10 @@
 	//	echo "Name: " . $product->getName() . "<br>";
 	//	echo "Description: " . $product->getDescription() . "<br>";
 	//	echo "Price: " . $product->getPrice() . "<br>";
+	//var_dump($_SESSION);
 	?>
+
+	
 
 
 	<!-- Product Section -->
@@ -69,14 +68,23 @@
 			<?php 
 			}else{
 			    foreach($available_sizes as $size){
+				$selected_size = isset($_GET['size']) ? htmlentities(trim($_GET['size'])) : false;
 			?>
-			    <a href="<?= "index.php?target=product&action=view&pname=$og_pname" . "&size=" . $size['name'];?>" class="btn size-option <?=(isset($_GET['size']) && htmlentities(trim($_GET['size'])) === $size['name']) ? 'active' : '';?>"><?=strtoupper($size['name']);?></a>
+			    <a href="<?= "index.php?target=product&action=view&pname=$og_pname" . "&size=" . $size['name'];?>" class="btn size-option <?=($selected_size === $size['name']) ? 'active' : '';?>"><?=strtoupper($size['name']);?></a>
 			<?php }} ?>
 		    </div>
 		</div>
 		
 		<!-- Add to Cart -->
-		<button class="btn btn-primary w-100 py-3 mb-4">ADD TO CART</button>
+		<?php if($available_sizes){ ?>
+		    <form method="POST">
+			<input type="hidden" name="id" value="<?=$product->getId()?>">
+			<input type="hidden" name="selected_size" value="<?=$selected_size;?>">
+			<input type="submit" class="btn btn-primary w-100 py-3 mb-4" name="add_to_cart_btn" value="Add To Cart">
+		    </form>
+		<?php }else{ ?>
+		    <button class="btn btn-primary w-100 py-3 mb-4" disabled> Add To Cart</button>
+		<?php } ?>
 		
 		<!-- Product Features -->
 		<div class="mb-4 product-features">

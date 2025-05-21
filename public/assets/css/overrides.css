@@ -11,6 +11,10 @@
     --bs-btn-border-color: #410000;
     --bs-btn-hover-bg: #410000;
     --bs-btn-hover-border-color: #410000;
+    --bs-btn-active-bg: #2e0000;
+    --bs-btn-active-border-color: #230000;
+    --bs-btn-disabled-bg: #410000;
+    --bs-btn-disabled-border-color: #410000;
 }
 
 
@@ -75,3 +79,34 @@ p{
 .description{
     font-size: 0.8rem;    
 }
+
+.cart-icon span{
+    font-family: var(--font-body);
+    font-size: 0.4rem;            
+}
+
+
+
+
+
+/* Media Queries */
+
+
+
+/* Medium devices (tablets, 768px and up) */
+@media only screen and (min-width: 768px) {
+    /* logo */
+    nav .navbar-brand{
+	position: static !important;
+	transform: translateX(+50%) !important;
+	left: 0%;
+    }
+
+    /* navbar menus */
+    .navbar-expand-md .offcanvas{
+	position: absolute !important;
+	transform: translateX(-50%) !important;
+	left: 50%;	
+    }
+}
+

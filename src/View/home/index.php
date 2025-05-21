@@ -14,7 +14,7 @@
 	    <!-- Content positioned at bottom left -->
 	    <div class="position-absolute bottom-0 start-0 p-5 mb-3 mx-md-5 mx-1 text-white">
 		<h1 class="display-6 fw-bold mb-2">Strength.</h1>
-		<a href="#" class="btn btn-primary px-5 py-1 rounded-0">Shop Now</a>
+		<a href="index.php?target=product&action=clothing" class="btn btn-primary px-5 py-1 rounded-0">Shop Now</a>
 	    </div>
 	</div>
     </div>
