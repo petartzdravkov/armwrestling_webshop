@@ -5,48 +5,42 @@ namespace Controller;
 use Model\Dao\ProductDao;
 use Controller\ProductController;
 use Exception;
+use Model\Dao\OrderDao;
+use Model\Order;
+use Model\Dao\UserDao;
 
 class CheckoutController{
 
     public function index(){
 
+	// get user id
 	$isUserLogged = $this->isUserLogged();
+	if($isUserLogged){
+	    $userDao = new UserDao();
+	    $user_id = $userDao->getUserIdByEmail($_SESSION['email']);
+	}else{
+	    $user_id = null;
+	}
+
+
+	// get cart items
 	$product_controller = new ProductController;
-	$productDao = new ProductDao;
-	$pdo = $productDao->getPdoConnection();
 	$cart_items = $product_controller->getCartItemsFromSession();
 	$total = $product_controller->calculateCartTotal($cart_items);
+
+	// get productDao for view
+	$productDao = new ProductDao;
+
+	// init payment error
 	$payment_error = '';
-	
+
 	// when pay now is pressed
 	if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['pay_btn'])){
-	    try{
-		$pdo->beginTransaction();
-		
-		foreach($cart_items as $key => $amount){
-		    [$id, $size] = explode("|", $key);
-		    
-		    $cart_item = $productDao->getProductById($id);
-		    $sizes_in_stock = $productDao->getAmountByIdAndSize($id, $size);
+	    $order = new Order($cart_items, $user_id);
+	    $orderDao = new OrderDao($productDao);
+	    $orderDao->save($order);
 
-		    // check if there is enough stock of this item and size
-		    if($sizes_in_stock < $amount){
-			throw new Exception("Not enough stock for '" . $cart_item->getName() . "', size '" . $size . "'.");
-		    }
-
-		    $productDao->decreaseStock($id, $size, $amount);   
-		}
-
-		$pdo->commit();
-		header("Location: index.php?target=checkout&action=success");
-		die;
-	    }catch (Exception $e){
-		$pdo->rollback();
-		$payment_error = $e->getMessage();
-	    }
-
-
-	    // header("Location: index.php?target=checkout&action=success");
+	    header("Location: index.php?target=checkout&action=success");
 	}
 
 	

@@ -37,6 +37,20 @@ class UserDao extends AbstractDao{
 	return null;
     }
 
+    public function getUserIdByEmail($email){
+	$pdo = self::getPdoConnection();
+	$sql = "SELECT id FROM dd_users WHERE email = ?";
+	$stmt = $pdo->prepare($sql);
+	$stmt->execute([$email]);
+	$user_id = $stmt->fetchColumn();
+
+	if ($user_id) {
+	    return $user_id;
+	}
+
+	return null;
+    }
+
 
 
 

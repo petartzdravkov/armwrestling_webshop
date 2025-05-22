@@ -91,3 +91,11 @@ ALTER TABLE
 # 15.05.2025
 ALTER TABLE `categories`
 CHANGE `parent_category_id` `parent_category_id` int unsigned NULL AFTER `name`;
+
+# 22.05.2025
+ALTER TABLE `dd_orders`
+CHANGE `user_id` `user_id` int unsigned NULL AFTER `datetime`;
+ALTER TABLE `dd_sold_items`
+ADD `size_id` int unsigned NOT NULL;
+ALTER TABLE `dd_orders`
+ADD FOREIGN KEY (`user_id`) REFERENCES `dd_users` (`id`);
