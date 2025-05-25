@@ -85,6 +85,14 @@ p{
     font-size: 0.4rem;            
 }
 
+#passModal label{
+    font-family: var(--font-body);
+    font-size: 0.7rem;            
+}
+
+input{
+    border-radius: 0 !important;
+}
 
 
 

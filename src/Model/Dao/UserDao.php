@@ -18,6 +18,14 @@ class UserDao extends AbstractDao{
 	$stmt = $pdo->prepare($sql);
 	$stmt->execute([$user->getEmail(), password_hash($user->getPass(), PASSWORD_BCRYPT), 'active', 2]);
     }
+
+    public function updatePass(User $user){
+	$pdo = self::getPdoConnection();
+	
+	$sql = 'UPDATE dd_users SET password = ? WHERE id = ?';
+	$stmt = $pdo->prepare($sql);
+	$stmt->execute([password_hash($user->getPass(), PASSWORD_BCRYPT), $user->getId()]);
+    }
     
     public function findByEmail($email) {
 	$pdo = self::getPdoConnection();
@@ -30,7 +38,8 @@ class UserDao extends AbstractDao{
             $user = new User();
             $user->setEmail($row['email']);
 	    $user->setPass($row['password']);
-	    $user->setRole($row['role']);
+	    $user->setRole($row['role_id']);
+	    $user->setId($row['id']);
             return $user;
 	}
 

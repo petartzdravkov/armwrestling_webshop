@@ -161,4 +161,15 @@ WHERE product_id = ? AND size_id = ?
 	
 	return $name;
     }
+
+    public function getSizeNameBySizeId($size_id){
+	$pdo = self::getPdoConnection();
+
+	$sql = "SELECT name FROM sd_sizes WHERE id = ?";
+	$stmt = $pdo->prepare($sql);
+	$stmt->execute([$size_id]);
+	$name = $stmt->fetchColumn();
+	
+	return $name;
+    }
 }

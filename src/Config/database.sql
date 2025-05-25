@@ -99,3 +99,7 @@ ALTER TABLE `dd_sold_items`
 ADD `size_id` int unsigned NOT NULL;
 ALTER TABLE `dd_orders`
 ADD FOREIGN KEY (`user_id`) REFERENCES `dd_users` (`id`);
+
+#23.05.2025
+ALTER TABLE `dd_sold_items`
+ADD FOREIGN KEY (`size_id`) REFERENCES `sd_sizes` (`id`);

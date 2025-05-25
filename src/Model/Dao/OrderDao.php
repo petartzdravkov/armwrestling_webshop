@@ -3,6 +3,8 @@
 namespace Model\Dao;
 
 use Model\Dao\AbstractDao;
+use Model\Order;
+use Model\Product;
 
 class OrderDao extends AbstractDao{
 
@@ -54,6 +56,38 @@ class OrderDao extends AbstractDao{
 	    $payment_error = $e->getMessage();
 	}
 
+    }
+
+    public function getAllOrdersOfUser($user_id){
+	$pdo = self::getPdoConnection();
+	
+	$sql = "SELECT * FROM dd_orders WHERE user_id = ?";
+	$stmt = $pdo->prepare($sql);
+	$stmt->execute([$user_id]);
+	$rows = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+
+	$orders = [];
+	foreach($rows as $row){
+	    $order = new Order();
+	    $order->setDatetime($row['datetime']);
+	    $order->setOrderId($row['id']);
+	    $order->setStatus($row['status']);
+
+	    $orders[] = $order;
+	}
+	
+	return $orders;
+    }
+
+    public function getAllSoldItemsFromOrder($order_id){
+	$pdo = self::getPdoConnection();
+	
+	$sql = "SELECT * FROM dd_sold_items WHERE order_id = ?";
+	$stmt = $pdo->prepare($sql);
+	$stmt->execute([$order_id]);
+	$rows = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+
+	return $rows;
     }
 
 

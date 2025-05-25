@@ -7,6 +7,7 @@ class User{
     private $email;
     private $pass;
     private $role;
+    private $id;
 
     public function setEmail($email){
 	//TODO validate
@@ -33,6 +34,15 @@ class User{
 
     public function getRole(){
 	return $this->role;
+    }
+
+    public function setId($id){
+	//TODO validate
+	$this->id = $id;
+    }
+
+    public function getId(){
+	return $this->id;
     }
     
 }
