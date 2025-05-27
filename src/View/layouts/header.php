@@ -42,6 +42,14 @@
 			    <li class="nav-item px-2">
 				<a href="index.php?target=product&action=equipment" class="nav-link"> Equipment </a>
 			    </li>
+			    <?php if(isset($_SESSION['role']) && $_SESSION['role'] != 3){ ?>
+			    <li class="nav-item px-2">
+				<a href="index.php?target=manage&action=products" class="nav-link"> Manage Products </a>
+			    </li>
+			    <li class="nav-item px-2">
+				<a href="index.php?target=manage&action=orders" class="nav-link"> Manage Orders </a>
+			    </li>
+			    <?php } ?>
 			</ul>
 		    </div>
 		</div>

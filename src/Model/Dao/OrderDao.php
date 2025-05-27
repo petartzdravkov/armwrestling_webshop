@@ -79,6 +79,27 @@ class OrderDao extends AbstractDao{
 	return $orders;
     }
 
+    public function getAllOrders(){
+	$pdo = self::getPdoConnection();
+	
+	$sql = "SELECT * FROM dd_orders";
+	$stmt = $pdo->prepare($sql);
+	$stmt->execute();
+	$rows = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+
+	$orders = [];
+	foreach($rows as $row){
+	    $order = new Order(null, $row['user_id']);
+	    $order->setDatetime($row['datetime']);
+	    $order->setOrderId($row['id']);
+	    $order->setStatus($row['status']);
+
+	    $orders[] = $order;
+	}
+	
+	return $orders;
+    }
+
     public function getAllSoldItemsFromOrder($order_id){
 	$pdo = self::getPdoConnection();
 	
@@ -88,6 +109,25 @@ class OrderDao extends AbstractDao{
 	$rows = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
 	return $rows;
+    }
+
+    public function getOrderStatusByOrderId($order_id){
+	$pdo = self::getPdoConnection();
+	
+	$sql = "SELECT status FROM dd_orders WHERE id = ?";
+	$stmt = $pdo->prepare($sql);
+	$stmt->execute([$order_id]);
+	$status = $stmt->fetchColumn();
+
+	return $status;
+    }
+
+    public function updateStatus($status, $order_id){
+	$pdo = self::getPdoConnection();
+	
+	$sql = "UPDATE dd_orders SET status = ? WHERE id = ?";
+	$stmt = $pdo->prepare($sql);
+	$stmt->execute([$status, $order_id]);
     }
 
 
