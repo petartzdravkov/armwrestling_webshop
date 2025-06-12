@@ -65,7 +65,7 @@ class ProductController{
 
     // view cart
     public function cart(){
-	var_dump($_SESSION);
+	//var_dump($_SESSION);
 	//remove items from cart
 	if($_SERVER['REQUEST_METHOD'] === "POST"){
 	    $key = htmlentities(trim($_POST['key']));

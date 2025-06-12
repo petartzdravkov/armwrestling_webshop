@@ -1,5 +1,5 @@
 <?php
-var_dump($_SESSION);
+//var_dump($_SESSION);
 if($_SESSION['role'] > 2 || empty($_SESSION)) header("Location: index.php");
 ?>
 
