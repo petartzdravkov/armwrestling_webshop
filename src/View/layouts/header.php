@@ -21,6 +21,7 @@
 
     </head>
     <body class="d-flex flex-column min-vh-100">
+	
 	<nav class="navbar navbar-expand-md py-0">
 	    <div class="container justify-content-between position-relative">
 		
@@ -56,11 +57,11 @@
 
 		
 		<div class="d-flex">
-		    <div class="search-icon p-2">
-			<a href="#" class="nav-link">
-			    <i class="bi bi-search"></i>
-			</a>
-		    </div>
+		    <!-- <div class="search-icon p-2">
+			 <a href="#" class="nav-link">
+			 <i class="bi bi-search"></i>
+			 </a>
+			 </div> -->
 		    <div class="account-icon p-2">
 			<a href="index.php?target=user&action=profile" class="nav-link">
 			    <i class="bi bi-person"></i>
@@ -70,9 +71,9 @@
 			<a href="index.php?target=product&action=cart" class="nav-link">			
 			    <i class="bi bi-bag position-relative">
 				<?php if(count($_SESSION['cart'])){ ?>
-				<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger px-1">
-				    <?=count($_SESSION['cart'])?>
-				</span>
+				    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger px-1">
+					<?=count($_SESSION['cart'])?>
+				    </span>
 				<?php } ?>
 			    </i>
 			</a>
@@ -81,5 +82,20 @@
 	    </div>
 	</nav>
 
-      
+	
+	<!-- errors -->
+	<?php if (!empty($_SESSION['error'])){ ?>
+	    <div class="container mt-3">
+		<div class="alert alert-danger alert-dismissible fade show" role="alert">
+		    <ul class="mb-0">
+			<li><?= htmlentities($_SESSION['error']) ?></li>
+		    </ul>
+		    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+		</div>
+	    </div>
+		<?php unset($_SESSION['error']); ?>
+	<?php } ?>
+
+
+
 

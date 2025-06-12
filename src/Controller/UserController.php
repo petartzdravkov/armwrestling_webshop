@@ -2,10 +2,12 @@
 
 namespace Controller;
 
+use Exception;
 use Model\User;
 use Model\Dao\UserDao;
 use Model\Dao\OrderDao;
 use Model\Dao\ProductDao;
+use Helpers\Validator;
 
 class UserController{
     public function login(){
@@ -15,7 +17,9 @@ class UserController{
 	    if(isset($_POST['register_btn'])){
 		// Register
 		$email = htmlentities(trim($_POST['email']));
+		$email = Validator::validateEmail($email);
 		$pass = htmlentities(trim($_POST['pass']));
+		$pass = Validator::validatePassword($pass);
 
 		$user = new User();
 		$user->setEmail($email);
@@ -37,8 +41,9 @@ class UserController{
 		    header('Location: index.php?target=home&action=index');
 		    die();
 		} else{
-		    $error = "Invalid email or password";
-		    require_once "../src/View/users/login.php";
+		    // $error = "Invalid email or password";
+		    // require_once "../src/View/users/login.php";
+		    throw new Exception("Invalid email or password");
 		}
 	    }
 
@@ -74,13 +79,14 @@ class UserController{
 		
 		if(empty($old_pass) || empty($new_pass)){
 		    $error = 'Both fields are required, password was not changed.';
-		}else{		    
+		}else{
+			$new_pass = Validator::validatePassword($new_pass);
 		    if(password_verify($old_pass, $user->getPass())){
 			$user->setPass($new_pass);
 			$userDao->updatePass($user);
 			$success = "Password has been changed successfully.";
 		    }else{
-			$error = "Wrong password, password was not changed.";
+			$error = "Wrong old password, password was not changed.";
 		    }
 		}
 	    }

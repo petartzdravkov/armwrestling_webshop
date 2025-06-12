@@ -8,21 +8,21 @@
     <h1 class="fw-bold"> <?=$title;?> </h1>
 
     <!-- Filters and View Options -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
-	<div class="dropdown">
-            <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
-		SORT BY
-            </button>
-            <ul class="dropdown-menu">
-		<li><a class="dropdown-item" href="#">Newest</a></li>
-		<li><a class="dropdown-item" href="#">Price: Low to High</a></li>
-		<li><a class="dropdown-item" href="#">Price: High to Low</a></li>
-		<li><a class="dropdown-item" href="#">Best Selling</a></li>
-            </ul>
+    <!-- <div class="d-flex justify-content-between align-items-center mb-4">
+	 <div class="dropdown">
+         <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+	 SORT BY
+         </button>
+         <ul class="dropdown-menu">
+	 <li><a class="dropdown-item" href="#">Newest</a></li>
+	 <li><a class="dropdown-item" href="#">Price: Low to High</a></li>
+	 <li><a class="dropdown-item" href="#">Price: High to Low</a></li>
+	 <li><a class="dropdown-item" href="#">Best Selling</a></li>
+         </ul> -->
 	    <!-- TODO products for the correct category -->
-	    <span class="d-flex text-body-secondary py-2">2 products</span>
-	</div>
-    </div>
+    <!-- <span class="d-flex text-body-secondary py-2">2 products</span>
+	 </div>
+	 </div> -->
 
     <!-- Products Grid -->
     <div class="row g-4">

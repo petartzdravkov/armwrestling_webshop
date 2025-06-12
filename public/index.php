@@ -48,6 +48,11 @@ if (file_exists(ROOT_PATH . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 
             header("HTTP/1.1 500"); echo $e->getMessage();
             die();
         }
+	catch(\Exception $e){
+	    $_SESSION['error'] = "An error occured: " . $e->getMessage();
+	    header("Location: index.php?target=" . $controllerName . "&action=" . $methodName);
+	    die();
+	}
     } else {
         $fileNotFound = true;
     }

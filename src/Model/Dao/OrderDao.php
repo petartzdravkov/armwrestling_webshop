@@ -2,6 +2,7 @@
 
 namespace Model\Dao;
 
+use Exception;
 use Model\Dao\AbstractDao;
 use Model\Order;
 use Model\Product;
@@ -36,13 +37,14 @@ class OrderDao extends AbstractDao{
 		    
 		// check if there is enough stock of this item and size
 		$cart_item = $this->productDao->getProductById($id);
-		$sizes_in_stock = $this->productDao->getAmountByIdAndSize($id, $size);
+		$size_id = $this->productDao->getSizeId($size);
+		$sizes_in_stock = $this->productDao->getAmountByIdAndSize($id, $size_id);
 		if($sizes_in_stock < $amount){
 		    throw new \Exception("Not enough stock for '" . $cart_item->getName() . "', size '" . $size . "'.");
 		}
 
 		// add sold items to db
-		$stmt_item->execute([$amount, $id, $order_id, $this->productDao->getSizeId($size)]);
+		$stmt_item->execute([$amount, $id, $order_id, $size_id]);
 
 		// decrease stock in db
 		$this->productDao->decreaseStock($id, $size, $amount);   
@@ -53,7 +55,7 @@ class OrderDao extends AbstractDao{
 	    die;
 	}catch (\Exception $e){
 	    $pdo->rollback();
-	    $payment_error = $e->getMessage();
+	    throw new Exception($e->getMessage());
 	}
 
     }

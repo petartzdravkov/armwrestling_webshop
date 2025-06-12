@@ -3,6 +3,7 @@
 namespace Controller;
 
 use Model\Dao\ProductDao;
+use Helpers\Validator;
 
 class ProductController{
 
@@ -27,7 +28,7 @@ class ProductController{
 	    $title = 'Equipment';
 	}
 	$title = $category === 'clothing' ? 'Apparel' : 'Equipment';
-	$products = $productDao->getAllProducts($category); //array with product objects
+	$products = $productDao->getAllPublishedProducts($category); //array with product objects
 
 	require_once "../src/View/products/index.php";
     }
@@ -48,6 +49,7 @@ class ProductController{
 		$error_msg = "Please select a size.";
 	    }else{
 		$added_product_id = htmlentities(trim($_POST['id']));
+		$added_product_id = Validator::validateProductId($added_product_id, $productDao, $product->getName());
 		$added_product_size = htmlentities(trim($_POST['selected_size']));
 		$key = $added_product_id . "|" . $added_product_size;
 		if(array_key_exists($key, $_SESSION['cart'])){
@@ -63,6 +65,7 @@ class ProductController{
 
     // view cart
     public function cart(){
+	var_dump($_SESSION);
 	//remove items from cart
 	if($_SERVER['REQUEST_METHOD'] === "POST"){
 	    $key = htmlentities(trim($_POST['key']));

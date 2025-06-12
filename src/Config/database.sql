@@ -103,3 +103,7 @@ ADD FOREIGN KEY (`user_id`) REFERENCES `dd_users` (`id`);
 #23.05.2025
 ALTER TABLE `dd_sold_items`
 ADD FOREIGN KEY (`size_id`) REFERENCES `sd_sizes` (`id`);
+
+# 12.06.2025
+ALTER TABLE `dd_products`
+ADD UNIQUE `name` (`name`);

@@ -11,7 +11,7 @@ class ProductDao extends AbstractDao{
 	//so that it doesn't inherit private constructor
     }
 
-    public function getAllProducts($category){
+    public function getAllPublishedProducts($category){
 	$pdo = self::getPdoConnection();
 	$category_id = null;
 	
@@ -23,6 +23,31 @@ class ProductDao extends AbstractDao{
 	$sql = "SELECT * FROM dd_products WHERE category_id = ? AND status = 'published'";
 	$stmt = $pdo->prepare($sql);
 	$stmt->execute([$category_id]);
+	$rows = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+
+	$products = [];
+	if($rows){
+	    foreach($rows as $row){
+		$product = new Product();
+		$product->setId($row['id']);
+		$product->setName($row['name']);
+		$product->setPrice($row['price']);
+		$product->setDescription($row['description']);
+		$product->setImgPath($row['image_path'] ?? null);
+		$product->setDateAdded($row['date_added']);
+		$product->setStatus($row['status']);
+		$product->setCategoryId($row['category_id']);
+		$products[] = $product;
+	    }
+	}
+	return $products;
+    }
+
+    public function getAllProducts(){
+	$pdo = self::getPdoConnection();
+	$sql = "SELECT * FROM dd_products";
+	$stmt = $pdo->prepare($sql);
+	$stmt->execute();
 	$rows = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
 	$products = [];
@@ -66,7 +91,7 @@ class ProductDao extends AbstractDao{
 
     }
 
-        public function getProductById($id){
+    public function getProductById($id){
 	$pdo = self::getPdoConnection();
 	$sql = "SELECT * FROM dd_products WHERE id = ?";
 	$stmt = $pdo->prepare($sql);
@@ -127,9 +152,44 @@ WHERE p.id = ? AND ps.product_id = ? AND ps.amount > 0;
 	$size_id = $this->getSizeId($size);
 	$sql = "SELECT amount FROM dd_product_sizes WHERE product_id = ? AND size_id = ?";
 	$stmt = $pdo->prepare($sql);
-	$stmt->execute([$prod_id, $size_id]);
+	$stmt->execute([$prod_id, $size]);
 	$amount = $stmt->fetchColumn();
-	
+	if($amount == NULL) $amount = 0;
+	return $amount;
+    }
+
+    public function setAmountByProductIdAndSizeId($prod_id, $size_id, $amount) {
+	$pdo = self::getPdoConnection();
+
+	$sql = "
+INSERT INTO dd_product_sizes (product_id, size_id, amount)
+VALUES (?, ?, ?)
+ON DUPLICATE KEY UPDATE amount = VALUES(amount)
+    ";
+
+	$stmt = $pdo->prepare($sql);
+	return $stmt->execute([$prod_id, $size_id, $amount]);
+    }
+
+    public function getTotalAmountByProductId($prod_id){
+	$pdo = self::getPdoConnection();
+
+	$sql = "SELECT SUM(amount) FROM dd_product_sizes WHERE product_id = ?;";
+	$stmt = $pdo->prepare($sql);
+	$stmt->execute([$prod_id]);
+	$amount = $stmt->fetchColumn();
+	if($amount == NULL) $amount = 0;
+	return $amount;
+    }
+
+    public function getAmountOfSizesByProductId($prod_id){
+	$pdo = self::getPdoConnection();
+
+	$sql = "SELECT COUNT(*) FROM dd_product_sizes WHERE product_id = ?;";
+	$stmt = $pdo->prepare($sql);
+	$stmt->execute([$prod_id]);
+	$amount = $stmt->fetchColumn();
+	if($amount == NULL) $amount = 0;
 	return $amount;
     }
 
@@ -171,5 +231,84 @@ WHERE product_id = ? AND size_id = ?
 	$name = $stmt->fetchColumn();
 	
 	return $name;
+    }
+
+    public function getAllSizesByCategory($category){
+	$pdo = self::getPdoConnection();
+
+	$sql = "
+SELECT s.name
+FROM categories AS c
+JOIN sd_category_sizes AS cs
+ON c.id = cs.category_id
+JOIN sd_sizes AS s
+ON cs.size_id = s.id
+WHERE c.name=?;
+";
+	$stmt = $pdo->prepare($sql);
+	$stmt->execute([$category]);
+	$rows = $stmt->fetchAll(\PDO::FETCH_COLUMN);
+	return $rows;
+    }
+
+    public function updateProduct($product) {
+	$pdo = self::getPdoConnection();
+	
+        $sql = "
+UPDATE dd_products 
+SET name = ?, price = ?, description = ?, 
+image_path = ?, status = ?, category_id = ?
+WHERE id = ?";
+        $stmt = $pdo->prepare($sql);
+     
+        return $stmt->execute([$product->getName(), $product->getPrice(), $product->getDescription(), $product->getImgPath(), $product->getStatus(), $product->getCategoryId(), $product->getId()]);
+    }
+
+    public function createProduct($product) {
+	$pdo = self::getPdoConnection();
+
+	$sql = "
+INSERT INTO dd_products 
+(name, price, description, image_path, date_added, status, category_id)
+VALUES
+(?, ?, ?, ?, NOW(), ?, ?)
+    ";
+
+	$stmt = $pdo->prepare($sql);
+
+	$success = $stmt->execute([
+            $product->getName(),
+            $product->getPrice(),
+            $product->getDescription(),
+            $product->getImgPath(),
+	    'draft',
+            $product->getCategoryId()
+	]);
+
+	if ($success) {
+            // Set the newly generated ID back on the product entity
+            $product->setId($pdo->lastInsertId());
+	}
+
+	return $success;
+    }
+
+    public function getProductStatusByProductId($product_id){
+	$pdo = self::getPdoConnection();
+	
+	$sql = "SELECT status FROM dd_products WHERE id = ?";
+	$stmt = $pdo->prepare($sql);
+	$stmt->execute([$product_id]);
+	$status = $stmt->fetchColumn();
+
+	return $status;
+    }
+
+    public function updateStatus($status, $product_id){
+	$pdo = self::getPdoConnection();
+	
+	$sql = "UPDATE dd_products SET status = ? WHERE id = ?";
+	$stmt = $pdo->prepare($sql);
+	$stmt->execute([$status, $product_id]);
     }
 }

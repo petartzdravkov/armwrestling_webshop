@@ -1,3 +1,8 @@
+<?php
+var_dump($_SESSION);
+if($_SESSION['role'] > 2 || empty($_SESSION)) header("Location: index.php");
+?>
+
 <?php include_once '../src/View/layouts/header.php';?>
 
 <main class="container py-4 px-4">
