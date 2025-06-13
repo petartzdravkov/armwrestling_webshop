@@ -20,6 +20,7 @@ class ManageController{
 	$productDao = new ProductDao();
 
 	if($_SERVER['REQUEST_METHOD'] === "POST"){
+	    		var_dump($_POST);
 	    // if "Save" button has been pressed on any individual existing product modal
 	    if(isset($_POST['save_edits'])){
 		// var_dump($_POST);
@@ -102,16 +103,18 @@ class ManageController{
 		foreach($_POST as $name => $value){
 		    $name = htmlentities(trim($name));
 		    $value = htmlentities(trim($value));
+		    var_dump($value);
 		    $value = Validator::validateEnum($value, ['draft', 'published', 'deleted'], 'Status');
+		    var_dump($value);
 
-		    if($name == "update_status") continue;
+		    // if($name == "update_status") continue;
 
-		    $product_id = explode("_", $name)[1];
+		    // $product_id = explode("_", $name)[1];
 
-		    $current_product_status = $productDao->getProductStatusByProductId($product_id);
-		    if($current_product_status !== $value){
-			$productDao->updateStatus($value, $product_id);
-		    }
+		    // $current_product_status = $productDao->getProductStatusByProductId($product_id);
+		    // if($current_product_status !== $value){
+		    // 	$productDao->updateStatus($value, $product_id);
+		    // }
 		}
 
 		// if "Save Product" has been pressed
