@@ -21,12 +21,6 @@ class ProductController{
     private function showProducts($category){
 	$productDao = new ProductDao();
 
-
-	if($category === 'clothing'){
-	    $title = 'Apparel';
-	}else{
-	    $title = 'Equipment';
-	}
 	$title = $category === 'clothing' ? 'Apparel' : 'Equipment';
 	$products = $productDao->getAllPublishedProducts($category); //array with product objects
 

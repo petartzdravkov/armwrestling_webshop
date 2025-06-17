@@ -51,8 +51,6 @@ class OrderDao extends AbstractDao{
 	    }
 
 	    $this->getPdoConnection()->commit();
-	    header("Location: index.php?target=checkout&action=success");
-	    die;
 	}catch (\Exception $e){
 	    $pdo->rollback();
 	    throw new Exception($e->getMessage());

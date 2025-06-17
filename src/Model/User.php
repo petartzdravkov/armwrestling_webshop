@@ -8,6 +8,7 @@ class User{
     private $pass;
     private $role;
     private $id;
+    private $status;
 
     public function setEmail($email){
 	//TODO validate
@@ -45,4 +46,12 @@ class User{
 	return $this->id;
     }
     
+    public function setStatus($status){
+	//TODO validate
+	$this->status = $status;
+    }
+
+    public function getStatus(){
+	return $this->status;
+    }    
 }

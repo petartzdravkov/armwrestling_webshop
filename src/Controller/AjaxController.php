@@ -54,6 +54,16 @@ class AjaxController{
 	echo $amount;	
     }
 
+    public function updateCart(){
+	if(isset($_GET['key']) && isset($_GET['action'])){
+	    $key = htmlentities(trim($_GET['key']));
+	    $value = htmlentities(trim($_GET['value']));
+
+	    $_SESSION['cart'][$key] = $value;
+	    echo $key . "-" . $value;
+	}
+    }
+
 
     
 }

@@ -20,18 +20,24 @@ class ManageController{
 	$productDao = new ProductDao();
 
 	if($_SERVER['REQUEST_METHOD'] === "POST"){
-	    		var_dump($_POST);
-	    // if "Save" button has been pressed on any individual existing product modal
+	    // if "Save" button has been pressed on any edit product modal
 	    if(isset($_POST['save_edits'])){
-		// var_dump($_POST);
 		// image upload
 		if(!empty($_FILES['img_path']['name'])){
 		    $file_tmp = $_FILES['img_path']['tmp_name'];
 		    $file_name = $_FILES['img_path']['name'];
+		    $file_size = $_FILES['img_path']['size'];
 
 		    $ext = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
 		    $allowed = ['image/jpg', 'image/jpeg', 'image/png', 'image/webp'];
+		    $maxSize = 2 * 1024 * 1024; //2mb
 
+		    // File size check
+		    if ($file_size > $maxSize) {
+			throw new Exception("File is too large. Maximum size is 2MB.");
+		    }
+
+		    // File type check
 		    if (in_array($_FILES['img_path']['type'], $allowed)) {
 			$new_name = uniqid('img_', true) . '.' . $ext;
 			$destination = "assets/images/products/" . $new_name;
@@ -56,22 +62,22 @@ class ManageController{
 
 		// change all other info
 		$name = htmlentities(trim($_POST['name']));
-		$name = Validator::validateName($name, "Product Name");
+		$name = Validator::validateName($name, 50, "Product Name");
 		$price = htmlentities(trim($_POST['price']));
-		$price = Validator::validateInt($price, 0, 99999, "Price");
+		$price = Validator::validateInt($price, 0, 65534, "Price");
 		$category = htmlentities(trim($_POST['category']));
 		$category = Validator::validateEnum($category, ['clothing', 'equipment'], 'Category');
 		$description = htmlentities(trim($_POST['description']));
 		$description = Validator::validateDescription($description, "Description");
 		$productId = htmlentities(trim($_POST['productId']));
-		$productId = Validator::validateProductId($productId, $productDao, $name);
+		$productId = Validator::validateProductId($productId, $productDao);
 
 		// prepare array with amounts for each size
 		$sizes_amounts = [];
 		foreach($_POST as $key => $value){
 		    if (strpos($key, 'amount') !== false) {
 			if(empty($value)) $value = 0;
-			$sizes_amounts[explode('_', $key)[0]] = $value;
+			$sizes_amounts[explode('_', $key)[0]] = intval($value);
 		    }else{
 			continue;
 		    }
@@ -93,6 +99,7 @@ class ManageController{
 		// save amount and sizes to db
 		foreach($sizes_amounts as $size => $amount){
 		    $size_id = $productDao->getSizeId($size);
+		    $amount = Validator::validateInt($amount, 0, 16777214, "Amount for " . ucfirst($size));
 		    $productDao->setAmountByProductIdAndSizeId($product->getId(), $size_id, $amount);
 		}
 		
@@ -102,28 +109,25 @@ class ManageController{
 	    }elseif(isset($_POST['update_status'])){
 		foreach($_POST as $name => $value){
 		    $name = htmlentities(trim($name));
+		    if($name == "update_status") continue;
 		    $value = htmlentities(trim($value));
-		    var_dump($value);
 		    $value = Validator::validateEnum($value, ['draft', 'published', 'deleted'], 'Status');
-		    var_dump($value);
 
-		    // if($name == "update_status") continue;
-
-		    // $product_id = explode("_", $name)[1];
-
-		    // $current_product_status = $productDao->getProductStatusByProductId($product_id);
-		    // if($current_product_status !== $value){
-		    // 	$productDao->updateStatus($value, $product_id);
-		    // }
+		    $product_id = explode("_", $name)[1];
+		    $current_product_status = $productDao->getProductStatusByProductId($product_id);
+		    if($current_product_status !== $value){
+			$productDao->updateStatus($value, $product_id);
+		    }
 		}
 
 		// if "Save Product" has been pressed
 	    }elseif(isset($_POST['save_new_product'])){
 		// get user values
 		$name = htmlentities(trim($_POST['name']));
-		$name = Validator::validateName($name, "Product Name");
+		$name = Validator::validateName($name, 50, "Product Name");
+		if($productDao->getProductByName($name)) throw new Exception("A product with this name already exists.");
 		$price = htmlentities(trim($_POST['price']));
-		$price = Validator::validateInt($price, 0, 99999, "Price");
+		$price = Validator::validateInt($price, 0, 65534, "Price");
 		$category = htmlentities(trim($_POST['category']));
 		$category = Validator::validateEnum($category, ['clothing', 'equipment'], 'Category');
 		$description = htmlentities(trim($_POST['description']));
@@ -140,6 +144,7 @@ class ManageController{
 		    }
 		}
 
+
 		// check if fields are empty
 		if(empty($_FILES['img_path']['name']) || empty($name) || empty($price) || empty($category) || empty($description)){
 		    throw new Exception("All fields are required");
@@ -147,10 +152,18 @@ class ManageController{
 		    // image upload
 		    $file_tmp = $_FILES['img_path']['tmp_name'];
 		    $file_name = $_FILES['img_path']['name'];
+		    $file_size = $_FILES['img_path']['size'];
 
 		    $ext = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
 		    $allowed = ['image/jpg', 'image/jpeg', 'image/png', 'image/webp'];
+		    $maxSize = 2 * 1024 * 1024;
 
+		    // File size check
+		    if ($file_size > $maxSize) {
+			throw new Exception("File is too large. Maximum size is 2MB.");
+		    }
+
+		    // File type check
 		    if (in_array($_FILES['img_path']['type'], $allowed)) {
 			$new_name = uniqid('img_', true) . '.' . $ext;
 			$destination = "assets/images/products/" . $new_name;
@@ -179,6 +192,7 @@ class ManageController{
 		    // save amount and sizes to db
 		    foreach($sizes_amounts as $size => $amount){
 			$size_id = $productDao->getSizeId($size);
+			$amount = Validator::validateInt($amount, 0, 16777214, "Amount for " . ucfirst($size));
 			$productDao->setAmountByProductIdAndSizeId($add_product->getId(), $size_id, $amount);
 		    }
 		}
@@ -203,10 +217,9 @@ class ManageController{
 	if($_SERVER['REQUEST_METHOD'] === "POST"){
 	    foreach($_POST as $name => $value){
 		$name = htmlentities(trim($name));
-		$value = htmlentities(trim($value));
-		$value = Validator::validateEnum($value, ['processing', 'shipped'], 'Status');
-		
 		if($name == "update_status") continue;
+		$value = htmlentities(trim($value));
+		$value = Validator::validateEnum($value, ['processing', 'shipped'], 'Status');		
 
 		$order_id = explode("_", $name)[1];
 

@@ -14,7 +14,7 @@
 
 
 	<!-- Product Section -->
-	<div class="row">
+	<div class="row my-4">
 	    <!-- Product Gallery -->
 	    <div class="col-sm-6 mb-4 mb-lg-0">
 		<div class="row">
@@ -73,7 +73,7 @@
 			?>
 			    <a href="<?= "index.php?target=product&action=view&pname=$og_pname" . "&size=" . $size['name'];?>" class="btn size-option <?=($selected_size === $size['name']) ? 'active' : '';?>"><?=strtoupper($size['name']);?></a>
 			<?php
-			}
+			    }
 			}
 			?>
 		    </div>

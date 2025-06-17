@@ -88,7 +88,10 @@ if($_SESSION['role'] > 2 || empty($_SESSION['role'])) header("Location: index.ph
 			<div class="row mb-2">
 			    <div class="col">
 				<input type="text" class="form-control mb-2" placeholder="Name" name="name" id="prod_name_<?=$product_id;?>" />
-				<input type="number" class="form-control mb-2" placeholder="Price" min="0" name="price" id="prod_price_<?=$product_id;?>" />
+				<div class="input-group input-group-sm mb-2">
+				    <span class="input-group-text rounded-0" id="basic-addon1">&euro;</span>
+				    <input type="number" class="form-control" placeholder="Price" min="0" name="price" id="prod_price_<?=$product_id;?>" />
+				</div>
 				
 				<select class="form-select" onchange="updateSizes(this, <?=$product_id;?>)" name="category" id="category_select_<?=$product_id;?>">
 				    <option value="clothing" <?=$product->getCategoryId() == 1 ? 'selected' : '';?>>Clothing</option>
@@ -132,8 +135,11 @@ if($_SESSION['role'] > 2 || empty($_SESSION['role'])) header("Location: index.ph
 		    <div class="row mb-2">
 			<div class="col">
 			    <input type="text" class="form-control mb-2" placeholder="Name" name="name" id="prod_name_add" />
-			    <input type="number" class="form-control mb-2" placeholder="Price" min="0" name="price" id="prod_price_add" />
-			    
+			    <div class="input-group input-group-sm mb-2">
+				<span class="input-group-text rounded-0" id="basic-addon1">&euro;</span>
+				<input type="number" class="form-control" placeholder="Price" min="0" name="price" id="prod_price_add" />
+			    </div>
+							
 			    <select class="form-select" onchange="addSizes(this)" name="category" id="category_select_add">
 				<option value="clothing">Clothing</option>
 				<option value="equipment">Equipment</option>
@@ -198,11 +204,11 @@ if($_SESSION['role'] > 2 || empty($_SESSION['role'])) header("Location: index.ph
 	     //create input fields
 	     for(var size in amounts){
 		 var individual_size_wrapper = document.createElement("div");
-		 individual_size_wrapper.className = "input-group m-0";
+		 individual_size_wrapper.className = "input-group input-group-sm m-0";
 		 sizes_amount_wrapper.appendChild(individual_size_wrapper);
 		 
 		 var size_label = document.createElement("span");
-		 size_label.setAttribute("class", "input-group-text w-25");
+		 size_label.setAttribute("class", "input-group-text w-25 rounded-0");
 		 size_label.innerHTML = size;
 		 individual_size_wrapper.appendChild(size_label);
 
@@ -235,11 +241,11 @@ function addSizes(input){
 	     //create input fields
 	     for(var i = 0; i < sizes.length; i++){
 		 var individual_size_wrapper = document.createElement("div");
-		 individual_size_wrapper.className = "input-group m-0";
+		 individual_size_wrapper.className = "input-group input-group-sm m-0";
 		 sizes_amount_wrapper.appendChild(individual_size_wrapper);
 		 
 		 var size_label = document.createElement("span");
-		 size_label.setAttribute("class", "input-group-text w-25");
+		 size_label.setAttribute("class", "input-group-text w-25 rounded-0");
 		 size_label.innerHTML = sizes[i];
 		 individual_size_wrapper.appendChild(size_label);
 

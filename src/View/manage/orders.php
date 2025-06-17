@@ -51,11 +51,11 @@ if($_SESSION['role'] > 2 || empty($_SESSION['role'])) header("Location: index.ph
 				$total_items += $sold_item['amount'];
 			    }
 			?>
-			<tr data-bs-toggle="modal" data-bs-target="#orderModal_<?=$order_id;?>">
-			    <td>#<?=$order_id;?></td>
-			    <td><?=$date->format('d M Y, H:i');?></td>
-			    <td><?=$user ? $user->getEmail() : 'Guest';?></td>
-			    <td><?=$total_sum_paid;?>&euro;</td>
+			<tr>
+			    <td data-bs-toggle="modal" data-bs-target="#orderModal_<?=$order_id;?>">#<?=$order_id;?></td>
+			    <td data-bs-toggle="modal" data-bs-target="#orderModal_<?=$order_id;?>"><?=$date->format('d M Y, H:i');?></td>
+			    <td data-bs-toggle="modal" data-bs-target="#orderModal_<?=$order_id;?>"><?=$user ? $user->getEmail() : 'Guest';?></td>
+			    <td data-bs-toggle="modal" data-bs-target="#orderModal_<?=$order_id;?>"><?=$total_sum_paid;?>&euro;</td>
 			    <td>
 				<div class="dropdown">
 				    <select name="status_<?=$order->getOrderid();?>" class="form-select btn btn-secondary">
@@ -64,7 +64,7 @@ if($_SESSION['role'] > 2 || empty($_SESSION['role'])) header("Location: index.ph
 				    </select>
 				</div>
 			    </td>
-			    <td><?=$total_items;?> items</td>
+			    <td data-bs-toggle="modal" data-bs-target="#orderModal_<?=$order_id;?>"><?=$total_items;?> items</td>
 			</tr>
 
 
@@ -99,41 +99,41 @@ if($_SESSION['role'] > 2 || empty($_SESSION['role'])) header("Location: index.ph
     // sold items
     $sold_items = $orderDao->getAllSoldItemsFromOrder($order_id);
 ?>
-<!-- Modal -->
-<div class="modal fade" id="orderModal_<?=$order_id;?>" tabindex="-1">
-    <div class="modal-dialog">
-	<div class="modal-content">
-	    <div class="modal-header">
-		<h1 class="modal-title fs-5" id="orderModalLabel">Order #<?=$order_id;?></h1>
-		<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-	    </div>
-	    <div class="modal-body">
-		<table class="table">
-		    <thead>
-			<tr>
-			    <th scope="col">Product</th>
-			    <th scope="col">Size</th>
-			    <th scope="col">Price</th>
-			    <th scope="col">Quantity</th>
-			</tr>
-		    </thead>
-		    <tbody>
-			<?php
-			foreach($sold_items as $sold_item){
-			    $product = $productDao->getProductById($sold_item['product_id']);
-			    $size = strtoupper($productDao->getSizeNameBySizeId($sold_item['size_id']));
-			?>
-			<tr>
-			    <td><?=$product->getName();?></td>
-			    <td><?=$size;?></td>			    
-			    <td><?=$product->getPrice();?>&euro;</td>
-			    <td><?=$sold_item['amount'];?></td>
-			</tr>
-			<?php } ?>
-		    </tbody>
-		</table>
+    <!-- Modal -->
+    <div class="modal fade" id="orderModal_<?=$order_id;?>" tabindex="-1">
+	<div class="modal-dialog">
+	    <div class="modal-content">
+		<div class="modal-header">
+		    <h1 class="modal-title fs-5" id="orderModalLabel">Order #<?=$order_id;?></h1>
+		    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+		</div>
+		<div class="modal-body">
+		    <table class="table">
+			<thead>
+			    <tr>
+				<th scope="col">Product</th>
+				<th scope="col">Size</th>
+				<th scope="col">Price</th>
+				<th scope="col">Quantity</th>
+			    </tr>
+			</thead>
+			<tbody>
+			    <?php
+			    foreach($sold_items as $sold_item){
+				$product = $productDao->getProductById($sold_item['product_id']);
+				$size = strtoupper($productDao->getSizeNameBySizeId($sold_item['size_id']));
+			    ?>
+				<tr>
+				    <td><?=$product->getName();?></td>
+				    <td><?=$size;?></td>			    
+				    <td><?=$product->getPrice();?>&euro;</td>
+				    <td><?=$sold_item['amount'];?></td>
+				</tr>
+			    <?php } ?>
+			</tbody>
+		    </table>
+		</div>
 	    </div>
 	</div>
     </div>
-</div>
 <?php } ?>

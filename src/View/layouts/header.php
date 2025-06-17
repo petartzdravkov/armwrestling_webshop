@@ -37,18 +37,22 @@
 		    </div>
 		    <div class="offcanvas-body py-2 justify-content-center">
 			<ul class="navbar-nav">
+			    <?php
+			    $get_target = htmlentities(trim($_GET['target']));
+			    $get_action = htmlentities(trim($_GET['action']));
+			    ?>
 			    <li class="nav-item px-2">
-				<a href="index.php?target=product&action=clothing" class="nav-link"> Clothing </a>
+				<a href="index.php?target=product&action=clothing" class="nav-link <?=($get_target == 'product' && $get_action == 'clothing') ? 'active' : '';?>"> Clothing </a>
 			    </li>
 			    <li class="nav-item px-2">
-				<a href="index.php?target=product&action=equipment" class="nav-link"> Equipment </a>
+				<a href="index.php?target=product&action=equipment" class="nav-link <?=($get_target == 'product' && $get_action == 'equipment') ? 'active' : '';?>"> Equipment </a>
 			    </li>
 			    <?php if(isset($_SESSION['role']) && $_SESSION['role'] != 3){ ?>
 			    <li class="nav-item px-2">
-				<a href="index.php?target=manage&action=products" class="nav-link"> Manage Products </a>
+				<a href="index.php?target=manage&action=products" class="nav-link <?=($get_target == 'manage' && $get_action == 'products') ? 'active' : '';?>"> Manage Products </a>
 			    </li>
 			    <li class="nav-item px-2">
-				<a href="index.php?target=manage&action=orders" class="nav-link"> Manage Orders </a>
+				<a href="index.php?target=manage&action=orders" class="nav-link <?=($get_target == 'manage' && $get_action == 'orders') ? 'active' : '';?>"> Manage Orders </a>
 			    </li>
 			    <?php } ?>
 			</ul>
@@ -62,13 +66,13 @@
 			 <i class="bi bi-search"></i>
 			 </a>
 			 </div> -->
-		    <div class="account-icon p-2">
-			<a href="index.php?target=user&action=profile" class="nav-link">
+		    <div class="nav-icon account-icon p-2">
+			<a href="index.php?target=user&action=profile" class="nav-link <?=($get_target == 'user' && $get_action == 'profile') ? 'active' : '';?>">
 			    <i class="bi bi-person"></i>
 			</a>
 		    </div>
-		    <div class="cart-icon p-2">
-			<a href="index.php?target=product&action=cart" class="nav-link">			
+		    <div class="nav-icon cart-icon p-2">
+			<a href="index.php?target=product&action=cart" class="nav-link <?=($get_target == 'product' && $get_action == 'cart') ? 'active' : '';?>">			
 			    <i class="bi bi-bag position-relative">
 				<?php if(count($_SESSION['cart'])){ ?>
 				    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger px-1">

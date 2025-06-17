@@ -12,6 +12,7 @@ use Model\Dao\UserDao;
 class CheckoutController{
 
     public function index(){
+	var_dump($_POST);
 
 	// get user id
 	$isUserLogged = $this->isUserLogged();
@@ -41,6 +42,7 @@ class CheckoutController{
 	    $orderDao->save($order);
 
 	    header("Location: index.php?target=checkout&action=success");
+	    die();
 	}
 
 	

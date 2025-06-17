@@ -27,6 +27,8 @@ class UserController{
 
 		$userDao = new UserDao();
 		$userDao->create($user);
+		header('Location: index.php?target=user&action=login');
+		die();
 	    }else{
 		//Login
 		$email = htmlentities(trim($_POST['email']));
@@ -35,15 +37,19 @@ class UserController{
 		$userDao = new UserDao();
 		$user = $userDao->findByEmail($email);
 
-		if($user && password_verify($pass, $user->getPass())){
-		    $_SESSION['email'] = $user->getEmail();
-		    $_SESSION['role'] = $user->getRole();
-		    header('Location: index.php?target=home&action=index');
-		    die();
-		} else{
-		    // $error = "Invalid email or password";
-		    // require_once "../src/View/users/login.php";
-		    throw new Exception("Invalid email or password");
+		if($user->getStatus() != 'deactivated'){
+		    if($user && password_verify($pass, $user->getPass())){
+			$_SESSION['email'] = $user->getEmail();
+			$_SESSION['role'] = $user->getRole();
+			header('Location: index.php?target=home&action=index');
+			die();
+		    } else{
+			// $error = "Invalid email or password";
+			// require_once "../src/View/users/login.php";
+			throw new Exception("Invalid email or password");
+		    }
+		}else{
+		    throw new Exception("This account has been deactivated or deleted.");
 		}
 	    }
 

@@ -16,7 +16,7 @@ class UserDao extends AbstractDao{
 	
 	$sql = 'INSERT INTO dd_users (email, password, status, role_id) VALUES (?, ?, ?, ?)';
 	$stmt = $pdo->prepare($sql);
-	$stmt->execute([$user->getEmail(), password_hash($user->getPass(), PASSWORD_BCRYPT), 'active', 2]);
+	$stmt->execute([$user->getEmail(), password_hash($user->getPass(), PASSWORD_BCRYPT), 'active', 3]);
     }
 
     public function updatePass(User $user){
@@ -40,6 +40,7 @@ class UserDao extends AbstractDao{
 	    $user->setPass($row['password']);
 	    $user->setRole($row['role_id']);
 	    $user->setId($row['id']);
+	    $user->setStatus($row['status']);
             return $user;
 	}
 
