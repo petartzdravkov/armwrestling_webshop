@@ -1,6 +1,6 @@
-# E-commerce PHP Web Application
+# Arm Wrestling E-commerce PHP Web Application
 
-This is a custom-built e-commerce website developed with **vanilla PHP**, implementing a **MVC structure**. The application supports category-based product browsing, cart management, seller order and products management, and more.
+This is a custom-built arm wrestling e-commerce website developed with **vanilla PHP**, implementing a **MVC structure**. The application supports category-based product browsing, cart management, seller order and products management, and more.
 
 ---
 
