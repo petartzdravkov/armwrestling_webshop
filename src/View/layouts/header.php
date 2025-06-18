@@ -38,8 +38,8 @@
 		    <div class="offcanvas-body py-2 justify-content-center">
 			<ul class="navbar-nav">
 			    <?php
-			    $get_target = htmlentities(trim($_GET['target']));
-			    $get_action = htmlentities(trim($_GET['action']));
+			    $get_target = isset($_GET['target']) ? htmlentities(trim($_GET['target'])) : null;
+			    $get_action = isset($_GET['action']) ? htmlentities(trim($_GET['action'])) : null;
 			    ?>
 			    <li class="nav-item px-2">
 				<a href="index.php?target=product&action=clothing" class="nav-link <?=($get_target == 'product' && $get_action == 'clothing') ? 'active' : '';?>"> Clothing </a>
