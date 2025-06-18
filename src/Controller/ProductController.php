@@ -22,8 +22,23 @@ class ProductController{
 	$productDao = new ProductDao();
 
 	$title = $category === 'clothing' ? 'Apparel' : 'Equipment';
-	$products = $productDao->getAllPublishedProducts($category); //array with product objects
 
+	// Pagination setup
+	$items_per_page = 4;
+	$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+	$total_products = $productDao->countAllProducts($category);
+	$total_pages = ceil($total_products / $items_per_page);
+	if ($page < 1){
+	    $page = 1;
+	}elseif($page > $total_pages){
+	    $page = intval($total_pages);
+	}
+
+	$offset = ($page - 1) * $items_per_page;
+	
+	//$products = $productDao->getAllPublishedProducts($category);
+	$products = $productDao->getPublishedPaginatedProducts($items_per_page, $offset, $category);
+	
 	require_once "../src/View/products/index.php";
     }
 

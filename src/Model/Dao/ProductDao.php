@@ -43,6 +43,65 @@ class ProductDao extends AbstractDao{
 	return $products;
     }
 
+    public function getPublishedPaginatedProducts($limit, $offset, $category) {
+	$pdo = self::getPdoConnection();
+	$category_id = null;
+	
+	if($category === 'clothing'){
+	    $category_id = 1;
+	}else{
+	    $category_id = 2;
+	}
+
+	$sql = "
+SELECT * FROM dd_products
+WHERE category_id = ? AND status = 'published'
+ORDER BY date_added DESC
+LIMIT ? OFFSET ?;
+";
+
+	$stmt = $pdo->prepare($sql);
+	$stmt->bindValue(1, $category_id, \PDO::PARAM_INT);
+	$stmt->bindValue(2, (int)$limit, \PDO::PARAM_INT);
+	$stmt->bindValue(3, (int)$offset, \PDO::PARAM_INT);
+	$stmt->execute();
+
+	$rows = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+
+	$products = [];
+	if($rows){
+	    foreach($rows as $row){
+		$product = new Product();
+		$product->setId($row['id']);
+		$product->setName($row['name']);
+		$product->setPrice($row['price']);
+		$product->setDescription($row['description']);
+		$product->setImgPath($row['image_path'] ?? null);
+		$product->setDateAdded($row['date_added']);
+		$product->setStatus($row['status']);
+		$product->setCategoryId($row['category_id']);
+		$products[] = $product;
+	    }
+	}
+	return $products;
+    }
+
+    public function countAllProducts($category) {
+	$pdo = self::getPdoConnection();
+	$category_id = null;
+	if($category === 'clothing'){
+	    $category_id = 1;
+	}else{
+	    $category_id = 2;
+	}
+	
+	$sql = "SELECT COUNT(*) FROM dd_products WHERE status = 'published' AND category_id = ?";
+	$stmt = $pdo->prepare($sql);
+	$stmt->execute([$category_id]);
+    
+	return $stmt->fetchColumn();
+    }
+
     public function getAllProducts(){
 	$pdo = self::getPdoConnection();
 	$sql = "SELECT * FROM dd_products";
