@@ -12,7 +12,6 @@ use Model\Dao\UserDao;
 class CheckoutController{
 
     public function index(){
-	var_dump($_POST);
 
 	// get user id
 	$isUserLogged = $this->isUserLogged();

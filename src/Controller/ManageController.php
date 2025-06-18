@@ -30,11 +30,11 @@ class ManageController{
 
 		    $ext = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
 		    $allowed = ['image/jpg', 'image/jpeg', 'image/png', 'image/webp'];
-		    $maxSize = 2 * 1024 * 1024; //2mb
+		    $maxSize = 3 * 1024 * 1024; //3mb
 
 		    // File size check
 		    if ($file_size > $maxSize) {
-			throw new Exception("File is too large. Maximum size is 2MB.");
+			throw new Exception("File is too large. Maximum size is 3MB.");
 		    }
 
 		    // File type check
@@ -156,11 +156,11 @@ class ManageController{
 
 		    $ext = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
 		    $allowed = ['image/jpg', 'image/jpeg', 'image/png', 'image/webp'];
-		    $maxSize = 2 * 1024 * 1024;
+		    $maxSize = 3 * 1024 * 1024;
 
 		    // File size check
 		    if ($file_size > $maxSize) {
-			throw new Exception("File is too large. Maximum size is 2MB.");
+			throw new Exception("File is too large. Maximum size is 3MB.");
 		    }
 
 		    // File type check
