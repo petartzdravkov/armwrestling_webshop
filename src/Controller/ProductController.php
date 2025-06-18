@@ -28,6 +28,7 @@ class ProductController{
 	$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 	$total_products = $productDao->countAllProducts($category);
 	$total_pages = ceil($total_products / $items_per_page);
+	$total_pages = $total_pages == 0 ? 1 : $total_pages; //if no products have been added yet
 	if ($page < 1){
 	    $page = 1;
 	}elseif($page > $total_pages){
